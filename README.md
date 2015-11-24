@@ -1,6 +1,13 @@
 Projet Middleware pour le M2 ALMA 2015-2016
 ===========================================
 
+Démarrage
+---------
+
+    $ git clone https://gitlab.nuiton.org/athimel/m2-mw-15-16.git
+    $ cd m2-mw-15-16
+    $ mvn clean install
+
 Téléchargements
 ---------------
 
