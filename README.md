@@ -12,7 +12,7 @@ Téléchargements
 Documentations
 --------------
 
-Spring MVC : http://docs.spring.io/spring/docs/4.1.x/spring-framework-reference/html/mvc.html
+Spring MVC : http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/mvc.html
 
 Me contacter
 ------------
