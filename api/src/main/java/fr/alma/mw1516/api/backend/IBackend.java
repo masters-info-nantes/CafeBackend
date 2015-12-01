@@ -23,18 +23,19 @@ public interface IBackend {
 	 * Consulter le solde de l'utilisateur actuel.
 	 * @return Solde de l'utilisateur.
 	 */
-	public int solde();
+	public double solde();
 	
 	/**
 	 * Créditer le solde de l'utilisateur actuel.
 	 * @param somme Montant à ajouter au solde
 	 */
-	public void credit(int somme);
+	public void credit(double somme);
 	
 	/**
 	 * Acheter une boisson.
 	 * Débite le solde du prix de la boisson, si possible.
 	 * @param nomProduit Nom de la boisson.
+	 * @return true si le paiement a réussi, false si le solde est insuffisant.
 	 */
-	public void acheter(String nomProduit);
+	public boolean acheter(String nomProduit);
 }
