@@ -16,22 +16,23 @@ public interface IBackend {
 	 * Demande d'authentification.
 	 * Le backend vérifie le token donné auprès du gestionnaire d'identification.
 	 * @param token Token généré par le gestionnaire d'identification.
+	 * @return 
 	 */
-	public void callback(String token) throws Exception;
+	public IUser callback(String token) throws Exception;
 	
 	/**
 	 * Consulter le solde de l'utilisateur actuel.
 	 * @return Solde de l'utilisateur.
 	 * @throws Exception 
 	 */
-	public double solde() throws Exception;
+	public double solde(String uid) throws Exception;
 	
 	/**
 	 * Créditer le solde de l'utilisateur actuel.
 	 * @param somme Montant à ajouter au solde
 	 * @throws Exception 
 	 */
-	public void credit(double somme) throws Exception;
+	public void credit(String uid, double somme) throws Exception;
 	
 	/**
 	 * Acheter une boisson.
@@ -40,5 +41,5 @@ public interface IBackend {
 	 * @return true si le paiement a réussi, false si le solde est insuffisant.
 	 * @throws Exception 
 	 */
-	public boolean acheter(String nomProduit) throws Exception;
+	public boolean acheter(String uid, String nomProduit) throws Exception;
 }

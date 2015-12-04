@@ -6,7 +6,7 @@ import java.util.Map;
 import fr.alma.mw1516.api.backend.IBackend;
 import fr.alma.mw1516.api.backend.IUser;
 import fr.alma.mw1516.services.backend.util.Log;
-import fr.alma.mw1516.services.backend.util.OperationDB;
+import fr.alma.mw1516.services.backend.util.MapDB;
 
 public class Backend implements IBackend {
 	
@@ -17,15 +17,13 @@ public class Backend implements IBackend {
 	/**
 	 * Communication avec MapDB
 	 */
-	private OperationDB db;
-	
-	private IUser currentUser;
+	private MapDB<String, Double> db;
 	
 	private Map<String, Double> produits;
 	
 	public Backend(String authUrl) {
 		this.authClient = new AuthClient(authUrl);
-		db = new OperationDB();
+		db = new MapDB<>("soldes", "soldes");
 		produits.put("cafe", .50);
 		produits.put("the", .60);
 		produits.put("chocolat", .70);
@@ -38,54 +36,45 @@ public class Backend implements IBackend {
 	}
 
 	@Override
-	public void callback(String token) throws Exception {
+	public IUser callback(String token) throws Exception {
 		IUser user = null;
 		user = authClient.token(token);
 		//Ajouter l'user avec un solde de 0 si pas présent.
-		if (db.SelectDB(user.getId()) == null) {
+		if (db.get(user.getId()) == null) {
 			System.out.println("Nouvel utilisateur : "+user);
-			db.AddDB(user.getId(), 0);
+			db.put(user.getId(), 0.);
 		}
-		currentUser = user;
+		return user;
 	}
 
 	@Override
-	public double solde() throws Exception {
-		if (currentUser == null) {
-			throw new Exception("Utilisateur non connecté");
-		}
-		return db.SelectDB(currentUser.getId());
+	public double solde(String uid) throws Exception {
+		return db.get(uid);
 	}
 
 	@Override
-	public void credit(double somme) throws Exception {
-		if (currentUser == null) {
-			throw new Exception("Utilisateur non connecté");
-		}
+	public void credit(String uid, double somme) throws Exception {
 		if (somme <= 0) {
 			throw new Exception("La somme doit être > 0");
 		}
-		double soldeActuel = db.SelectDB(currentUser.getId());
-		db.AddDB(currentUser.getId(), soldeActuel + somme);
-		Log.getInstance().pushRefill(currentUser.getId(), somme, soldeActuel);
+		double soldeActuel = db.get(uid);
+		db.update(uid, soldeActuel + somme);
+		Log.getInstance().pushRefill(uid, somme, soldeActuel);
 	}
 
 	@Override
-	public boolean acheter(String nomProduit) throws Exception {
-		if (currentUser == null) {
-			throw new Exception("Utilisateur non connecté");
-		}
+	public boolean acheter(String uid, String nomProduit) throws Exception {
 		Double prixProd = produits.get(nomProduit);
 		if (prixProd == null) {
 			throw new Exception("Le produit n'existe pas");
 		}
-		double solde = db.SelectDB(currentUser.getId());
+		double solde = db.get(uid);
 		if (prixProd > solde) {
 			return false;
 		}
 		//débiter le solde
-		db.AddDB(currentUser.getId(), solde - prixProd);
-		Log.getInstance().pushDrink(currentUser.getId(), nomProduit, prixProd, solde);
+		db.update(uid, solde - prixProd);
+		Log.getInstance().pushDrink(uid, nomProduit, prixProd, solde);
 		return true;
 	}
 
