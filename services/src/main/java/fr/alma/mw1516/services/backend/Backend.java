@@ -2,10 +2,10 @@ package fr.alma.mw1516.services.backend;
 
 import java.util.Map;
 
-import javax.jms.MapMessage;
 
 import fr.alma.mw1516.api.backend.IBackend;
 import fr.alma.mw1516.api.backend.IUser;
+import fr.alma.mw1516.services.backend.util.Log;
 import fr.alma.mw1516.services.backend.util.OperationDB;
 
 public class Backend implements IBackend {
@@ -46,7 +46,6 @@ public class Backend implements IBackend {
 			System.out.println("Nouvel utilisateur : "+user);
 			db.AddDB(user.getId(), 0);
 		}
-		//pusher jms
 		currentUser = user;
 	}
 
@@ -68,7 +67,7 @@ public class Backend implements IBackend {
 		}
 		double soldeActuel = db.SelectDB(currentUser.getId());
 		db.AddDB(currentUser.getId(), soldeActuel + somme);
-		//pusher jms
+		Log.getInstance().pushRefill(currentUser.getId(), somme, soldeActuel);
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class Backend implements IBackend {
 		}
 		//débiter le solde
 		db.AddDB(currentUser.getId(), solde - prixProd);
-		//pusher jms
+		Log.getInstance().pushDrink(currentUser.getId(), nomProduit, prixProd, solde);
 		return true;
 	}
 
