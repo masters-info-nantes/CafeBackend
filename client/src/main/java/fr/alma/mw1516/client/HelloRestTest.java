@@ -55,7 +55,7 @@ public class HelloRestTest {
 
         
         // Définition de l'URL d'appel
-        HttpPost request = new HttpPost("http://localhost:8080/ame-services-rest/service/sample/sayHello");
+        HttpPost request = new HttpPost("http://localhost:8080/ame-services-rest/service/cafeBackend/");
 
         request.setHeader("accept", "application/json");
         List<NameValuePair> params = new ArrayList<NameValuePair>();
