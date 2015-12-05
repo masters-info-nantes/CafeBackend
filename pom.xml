@@ -3,41 +3,41 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.nuiton</groupId>
-    <artifactId>pom</artifactId>
-    <version>3</version>
+    <groupId>fr.alma.mw1516.groupe</groupId>
+    <artifactId>ame-parent</artifactId>
+    <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>fr.alma.mw1516.groupe</groupId>
-  <artifactId>ame-parent</artifactId>
-  <version>0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <artifactId>ame-services-ejb</artifactId>
+  <packaging>jar</packaging>
 
-  <name>ALMA Mobile Ecosystem</name>
-
-  <modules>
-    <module>api</module>
-    <module>services</module>
-    <module>services-rest</module>
-    <module>services-ejb</module>
-    <module>client</module>
-  </modules>
+  <name>ALMA Mobile Ecosystem :: Services EJB</name>
 
   <properties>
-    <enforcer.skip>true</enforcer.skip>
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ame-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.190</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>6.0</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
-
-  <repositories>
-
-    <repository>
-      <id>devjavanet</id>
-      <url>http://download.java.net/maven2/</url>
-    </repository>
-
-  </repositories>
 
   <build>
     <resources />
